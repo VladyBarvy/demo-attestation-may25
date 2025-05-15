@@ -1,10 +1,10 @@
 import { Client } from 'pg';
 
-export default async () => {
+const connectionDataBase = async () => {
   const client = new Client({
     user: 'postgres',
     password: '1234',
-    host: 'localhost',
+    host: '172.28.32.1',  // 172.28.35.82  172.28.32.1
     port: '5432',
     database: 'officedb',
   });
@@ -12,3 +12,5 @@ export default async () => {
   await client.connect();
   return client;
 };
+
+export default connectionDataBase;
