@@ -11,6 +11,11 @@ const api = {
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
 // just add to the DOM global.
+// contextBridge.exposeInMainWorld('api', {
+//   getPartners: () => ipcRenderer.invoke('getPartners'),
+//   // Добавьте другие методы по аналогии
+// });
+
 if (process.contextIsolated) {
   try {
     contextBridge.exposeInMainWorld('electron', electronAPI)

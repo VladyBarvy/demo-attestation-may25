@@ -1,11 +1,12 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
-import icon from '../../resources/icon_3.ico?asset'
 import connectionDataBase from './db'
 
 async function getPartners() {
   try {
+
+    /*
     const response = await global.dbclient.query(`SELECT T1.*,
     CASE WHEN sum(T2.production_quantity) > 300000 THEN 15
     WHEN sum(T2.production_quantity) > 50000 THEN 10
@@ -15,11 +16,15 @@ async function getPartners() {
     from partners as T1
     LEFT JOIN sales as T2 on T1.id = T2.partner_id
     GROUP BY T1.id`)
+    */
+    const response = await global.dbclient.query(`SELECT * from partners`)
+
     return response.rows
   } catch (e) {
     console.log(e)
   }
 }
+
 async function createPartner(event, partner) {
   const { type, name, ceo, email, phone, address, rating } = partner;
 
@@ -31,6 +36,7 @@ async function createPartner(event, partner) {
     dialog.showErrorBox('Ошибка', "Партнер с таким именем уже есть")
   }
 }
+
 async function updatePartner(event, partner) {
   const { id, type, name, ceo, email, phone, address, rating } = partner;
 
@@ -47,13 +53,16 @@ async function updatePartner(event, partner) {
 }
 
 function createWindow() {
+  const winIcon = join(__dirname, '../../resources/icon_3.ico');
+  const linuxIcon = join(__dirname, '../../resources/icon_31.png');
+
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     width: 900,
     height: 670,
     show: false,
     autoHideMenuBar: true,
-    ...(process.platform === 'linux' ? { icon } : {}),
+    ...(process.platform === 'linux' ? { icon: linuxIcon } : { icon: winIcon }),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
       sandbox: false
@@ -64,7 +73,7 @@ function createWindow() {
     mainWindow.show()
   })
 
-  mainWindow.webContents.setWindowOpenHandler((details) => {
+   mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })
@@ -83,9 +92,6 @@ app.whenReady().then(async () => {
   ipcMain.handle('getPartners', getPartners)
   ipcMain.handle('createPartner', createPartner)
   ipcMain.handle('updatePartner', updatePartner)
-
-
-
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)
