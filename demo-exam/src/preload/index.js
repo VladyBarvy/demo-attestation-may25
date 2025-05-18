@@ -1,20 +1,58 @@
 import { contextBridge, ipcRenderer } from 'electron'
 import { electronAPI } from '@electron-toolkit/preload'
 
-// Custom APIs for renderer
-const api = {
-  getPartners: () => ipcRenderer.invoke('getPartners'),
-  createPartner: (partner) => ipcRenderer.invoke('createPartner', partner),
-  updatePartner: (partner) => ipcRenderer.invoke('updatePartner', partner)
-}
-
 // Use `contextBridge` APIs to expose Electron APIs to
 // renderer only if context isolation is enabled, otherwise
 // just add to the DOM global.
-// contextBridge.exposeInMainWorld('api', {
-//   getPartners: () => ipcRenderer.invoke('getPartners'),
-//   // Добавьте другие методы по аналогии
-// });
+const api = {
+  // Получение данных о партнерах
+  getPartners: async () => {
+    try {
+      return await ipcRenderer.invoke('getPartners')
+    } catch (error) {
+      console.error('Error getting partners:', error)
+      throw error
+    }
+  },
+
+  // Получение данных о продажах
+  getSales: async () => {
+    try {
+      return await ipcRenderer.invoke('getSales')
+    } catch (error) {
+      console.error('Error getting sales:', error)
+      throw error
+    }
+  },
+
+  // Создание нового партнера
+  createPartner: async (partner) => {
+    try {
+      if (!partner || typeof partner !== 'object') {
+        throw new Error('Invalid partner data')
+      }
+      return await ipcRenderer.invoke('createPartner', partner)
+    } catch (error) {
+      console.error('Error creating partner:', error)
+      throw error
+    }
+  },
+
+  // Обновление партнера
+  updatePartner: async (partner) => {
+    try {
+      if (!partner || typeof partner !== 'object' || !partner.id) {
+        throw new Error('Invalid partner data or missing ID')
+      }
+      return await ipcRenderer.invoke('updatePartner', partner)
+    } catch (error) {
+      console.error('Error updating partner:', error)
+      throw error
+    }
+  }
+
+
+}
 
 if (process.contextIsolated) {
   try {

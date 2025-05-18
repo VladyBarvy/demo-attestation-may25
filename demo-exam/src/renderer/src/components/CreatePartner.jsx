@@ -21,7 +21,7 @@ export default function CreatePartner() {
   return <div className="form">
     <Link to={'/'}><button>{"<-- Назад"}</button></Link>
     
-    <h1>Создать партнера</h1>
+    <h1>- Создать партнера -</h1>
     <form onSubmit={(e) => submitHandler(e)}>
       <label htmlFor="name">Наименование:</label>
       <input id="name" type="text" required />
@@ -42,7 +42,7 @@ export default function CreatePartner() {
       <input id="phone" type="tel" required />
       <label htmlFor="email">Email компании:</label>
       <input id="email" type="email" required />
-      <button type="submit">Создать партнера</button>
+      <button className="button" type="submit">Создать партнера</button>
     </form>
   </div>
 }

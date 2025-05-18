@@ -6,24 +6,52 @@ import logo from '../assets/image_app.png'
 function MainPage() {
   const navigate = useNavigate();
   const [partners, setPartners] = useState([]);
+  const [sales, setSales] = useState([]);
+
+
+
+  // useEffect(() => {
+  //   document.title = 'Demo-Exam App';
+  //   (async () => {
+  //     const partners_data = await window.api.getPartners();
+  //     setPartners(partners_data);
+  //     const sales_data = await window.api.getSales();
+  //     setSales(sales_data);
+  //   })()
+  // }, [])
+
+
   useEffect(() => {
-    (async () => {
-      const res = await window.api.getPartners()
-      console.log(res)
-      setPartners(res)
-    })()
+    document.title = 'Demo-Exam App';
+    fetchData();
   }, [])
+
+  async function fetchData() {
+    const partners_data = await window.api.getPartners();
+    setPartners(partners_data);
+    const sales_data = await window.api.getSales();
+    setSales(sales_data);
+  }
+
+  async function handleDeletePartner(id, e) {
+    e.stopPropagation(); // Предотвращаем срабатывание onClick карточки
+    const confirmDelete = window.confirm("Вы уверены, что хотите удалить этого партнера?");
+    if (confirmDelete) {
+      await window.api.deletePartner(id);
+      fetchData(); // Обновляем список после удаления
+    }
+  }
 
   return (
     <>
       <div className="page-heading">
         <img className="page-logo" src={logo} alt="" />
-        <h1>Партнеры</h1>
+        <h1> - ПАРТНЁРЫ - </h1>
       </div>
       <ul className="partners-list">
         {partners.map((partner) => {
-          return <li className="partner-card" key={partner.id} onClick={() => { navigate('/update', { state: { partner } }) }}>
-            <div className="partner-data">
+          return <li className="partner_card" key={partner.id} onClick={() => { navigate('/update', { state: { partner } }) }}>
+            <div className="partner_data">
               <p className="card_heading">{partner.organization_type} | {partner.name}</p>
               <div className="partner-data-info">
                 <p>{partner.ceo}</p>
@@ -31,16 +59,22 @@ function MainPage() {
                 <p>Рейтинг: {partner.rating}</p>
               </div>
             </div>
-            <div className="partner-sale partner-data card_heading">
-              {partner.discount}%
+            <div className="partner-actions">
+              <div className="partner-sale partner_data card_heading">
+                {sales.find(sale => sale.partner_id === partner.id)?.discount_percentage || 0}%
+              </div>
+              <button className="delete-button" onClick={(e) => handleDeletePartner(partner.id, e)}>
+                Удалить
+              </button>
             </div>
+
           </li>
         })}
       </ul>
 
       <Link to={'/create'}>
-        <button>
-          Создать партнера
+        <button className="button">
+          Создать нового партнера
         </button>
       </Link>
     </>

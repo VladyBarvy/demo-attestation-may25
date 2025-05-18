@@ -26,7 +26,7 @@ export default function UpdatePartner() {
 
   return <div className="form">
     <Link to={'/'}><button>{"<-- Назад"}</button></Link>
-    <h1>Обновить партнера</h1>
+    <h1>- Обновить партнера -</h1>
     <form onSubmit={(e) => submitHandler(e)}>
       <label htmlFor="name">Наименование:</label>
       <input id="name" type="text" required defaultValue={partner.name} />
@@ -47,7 +47,7 @@ export default function UpdatePartner() {
       <input id="phone" type="tel" required defaultValue={partner.phone} />
       <label htmlFor="email">Email компании:</label>
       <input id="email" type="email" required defaultValue={partner.email}/>
-      <button type="submit">Обновить партнера</button>
+      <button className="button" type="submit">Обновить партнера</button>
     </form>
   </div>
 }

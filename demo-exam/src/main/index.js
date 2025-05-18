@@ -17,9 +17,33 @@ async function getPartners() {
     LEFT JOIN sales as T2 on T1.id = T2.partner_id
     GROUP BY T1.id`)
     */
-    const response = await global.dbclient.query(`SELECT * from partners`)
+    const main_data = await global.dbclient.query(`SELECT * from partners`) // основные данные из таблицы partners
+    return main_data.rows
+  } catch (e) {
+    console.log(e)
+  }
+}
 
-    return response.rows
+async function getSales() {
+  try {
+    const sales_data = await global.dbclient.query(`
+      SELECT 
+      partner_id,
+      SUM(production_quuantity) AS total_quantity,
+      CASE 
+          WHEN SUM(production_quuantity) < 10000 THEN 0
+          WHEN SUM(production_quuantity) BETWEEN 10000 AND 50000 THEN 5
+          WHEN SUM(production_quuantity) BETWEEN 50000 AND 300000 THEN 10
+          WHEN SUM(production_quuantity) > 300000 THEN 15
+      END AS discount_percentage
+      FROM 
+        sales
+      GROUP BY 
+        partner_id
+      ORDER BY 
+        partner_id;
+    `)
+    return sales_data.rows
   } catch (e) {
     console.log(e)
   }
@@ -73,7 +97,7 @@ function createWindow() {
     mainWindow.show()
   })
 
-   mainWindow.webContents.setWindowOpenHandler((details) => {
+  mainWindow.webContents.setWindowOpenHandler((details) => {
     shell.openExternal(details.url)
     return { action: 'deny' }
   })
@@ -90,6 +114,7 @@ app.whenReady().then(async () => {
 
   global.dbclient = await connectionDataBase();
   ipcMain.handle('getPartners', getPartners)
+  ipcMain.handle('getSales', getSales)
   ipcMain.handle('createPartner', createPartner)
   ipcMain.handle('updatePartner', updatePartner)
 
