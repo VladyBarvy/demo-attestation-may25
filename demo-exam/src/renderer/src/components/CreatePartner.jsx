@@ -18,31 +18,83 @@ export default function CreatePartner() {
     document.querySelector('form').reset()
   }
 
-  return <div className="form">
-    <Link to={'/'}><button>{"<-- Назад"}</button></Link>
-    
+  return <div className="form_update_create">
     <h1>- Создать партнера -</h1>
     <form onSubmit={(e) => submitHandler(e)}>
-      <label htmlFor="name">Наименование:</label>
-      <input id="name" type="text" required />
-      <label htmlFor="type">Тип партнера:</label>
-      <select name="" id="type" required>
-        <option value="ЗАО">ЗАО</option>
-        <option value="ООО">ООО</option>
-        <option value="ОАО">ОАО</option>
-        <option value="ПАО">ПАО</option>
-      </select>
-      <label htmlFor="rating">Рейтинг:</label>
-      <input id="rating" type="number" step="1" min='0' max='100' required />
-      <label htmlFor="address">Адрес:</label>
-      <input id="address" type="text" required />
-      <label htmlFor="ceo">ФИО директора:</label>
-      <input id="ceo" type="text" required />
-      <label htmlFor="phone">Телефон:</label>
-      <input id="phone" type="tel" required />
-      <label htmlFor="email">Email компании:</label>
-      <input id="email" type="email" required />
+
+      <div className="parametr">
+        <div>
+          <label htmlFor="name">Наименование:</label>
+        </div>
+        <div>
+          <input className="input_style" id="name" type="text" required />
+        </div>
+      </div>
+
+      <div className="parametr">
+        <div>
+          <label htmlFor="type">Тип партнера:</label>
+        </div>
+        <div>
+          <select className="input_style" name="" id="type" required>
+            <option value="ЗАО">ЗАО</option>
+            <option value="ООО">ООО</option>
+            <option value="ОАО">ОАО</option>
+            <option value="ПАО">ПАО</option>
+          </select>
+        </div>
+      </div>
+
+      <div className="parametr">
+        <div>
+          <label htmlFor="rating">Рейтинг:</label>
+        </div>
+        <div>
+          <input className="input_style" id="rating" type="number" step="1" min='0' max='100' required />
+        </div>
+      </div>
+
+      <div className="parametr">
+        <div>
+          <label htmlFor="address">Адрес:</label>
+        </div>
+        <div>
+          <input className="input_style" id="address" type="text" required />
+        </div>
+      </div>
+
+      <div className="parametr">
+        <div>
+          <label htmlFor="ceo">ФИО директора:</label>
+        </div>
+        <div>
+          <input className="input_style" id="ceo" type="text" required />
+        </div>
+      </div>
+
+      <div className="parametr">
+        <div>
+          <label htmlFor="phone">Телефон:</label>
+        </div>
+        <div>
+          <input className="input_style" id="phone" type="tel" required />
+        </div>
+      </div>
+
+      <div className="parametr">
+        <div>
+          <label htmlFor="email">Email компании:</label>
+        </div>
+        <div>
+          <input className="input_style" id="email" type="email" required />
+        </div>
+      </div>
+
       <button className="button" type="submit">Создать партнера</button>
+
+      <Link to={'/'}>
+        <button className="button" style={{ width: "530px" }}>↩ На главную</button>
+      </Link>
     </form>
   </div>
 }

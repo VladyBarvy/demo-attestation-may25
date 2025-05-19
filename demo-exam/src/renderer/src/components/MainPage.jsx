@@ -8,19 +8,6 @@ function MainPage() {
   const [partners, setPartners] = useState([]);
   const [sales, setSales] = useState([]);
 
-
-
-  // useEffect(() => {
-  //   document.title = 'Demo-Exam App';
-  //   (async () => {
-  //     const partners_data = await window.api.getPartners();
-  //     setPartners(partners_data);
-  //     const sales_data = await window.api.getSales();
-  //     setSales(sales_data);
-  //   })()
-  // }, [])
-
-
   useEffect(() => {
     document.title = 'Demo-Exam App';
     fetchData();
@@ -45,10 +32,13 @@ function MainPage() {
   return (
     <>
       <div className="page-heading">
-        <img className="page-logo" src={logo} alt="" />
+        <img className="page_logotip" src={logo} alt="" />
         <h1> - ПАРТНЁРЫ - </h1>
       </div>
-      <ul className="partners-list">
+
+
+
+      {/* <ul className="partners-list">
         {partners.map((partner) => {
           return <li className="partner_card" key={partner.id} onClick={() => { navigate('/update', { state: { partner } }) }}>
             <div className="partner_data">
@@ -59,24 +49,51 @@ function MainPage() {
                 <p>Рейтинг: {partner.rating}</p>
               </div>
             </div>
-            <div className="partner-actions">
-              <div className="partner-sale partner_data card_heading">
-                {sales.find(sale => sale.partner_id === partner.id)?.discount_percentage || 0}%
-              </div>
-              <button className="delete-button" onClick={(e) => handleDeletePartner(partner.id, e)}>
-                Удалить
-              </button>
+            <div className="partner-sale partner_data card_heading">
+              {sales.find(sale => sale.partner_id === partner.id)?.discount_percentage || 0}%
             </div>
-
           </li>
         })}
-      </ul>
+      </ul> */}
+
+
+
+      <div className="partners_container">
+        <ul className="partners_list">
+          {partners.map((partner) => {
+            return (
+              <li className="partner_item" key={partner.id}>
+                <div className="partner_card" onClick={() => { navigate('/update', { state: { partner } }) }}>
+                  <div className="partner_data">
+                    <p className="card_heading">{partner.organization_type} | {partner.name}</p>
+                    <div className="partner-data-info">
+                      <p>{partner.ceo}</p>
+                      <p>{partner.phone}</p>
+                      <p>Рейтинг: {partner.rating}</p>
+                    </div>
+                  </div>
+
+                  <div className="partner-sale partner_data card_heading">
+                    {sales.find(sale => sale.partner_id === partner.id)?.discount_percentage || 0}%
+                  </div>
+                </div>
+
+                <button className="delete_button" onClick={(e) => handleDeletePartner(partner.id, e)}>
+                  Удалить
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+      </div>
 
       <Link to={'/create'}>
-        <button className="button">
+        <button className="button"  style={{ width: "750px" }}>
           Создать нового партнера
         </button>
       </Link>
+
+
     </>
   )
 }
