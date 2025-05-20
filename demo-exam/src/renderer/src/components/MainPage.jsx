@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { Link } from "react-router";
 import { useNavigate } from "react-router-dom";
-import logo from '../assets/image_app.png'
+import logo from '../assets/master_floor.png'
 
 function MainPage() {
   const navigate = useNavigate();
@@ -9,7 +9,7 @@ function MainPage() {
   const [sales, setSales] = useState([]);
 
   useEffect(() => {
-    document.title = 'Demo-Exam App';
+    document.title = 'Master Floor & Co';
     fetchData();
   }, [])
 
@@ -21,11 +21,11 @@ function MainPage() {
   }
 
   async function handleDeletePartner(id, e) {
-    e.stopPropagation(); // Предотвращаем срабатывание onClick карточки
+    e.stopPropagation();
     const confirmDelete = window.confirm("Вы уверены, что хотите удалить этого партнера?");
     if (confirmDelete) {
       await window.api.deletePartner(id);
-      fetchData(); // Обновляем список после удаления
+      fetchData();
     }
   }
 
@@ -35,28 +35,6 @@ function MainPage() {
         <img className="page_logotip" src={logo} alt="" />
         <h1> - ПАРТНЁРЫ - </h1>
       </div>
-
-
-
-      {/* <ul className="partners-list">
-        {partners.map((partner) => {
-          return <li className="partner_card" key={partner.id} onClick={() => { navigate('/update', { state: { partner } }) }}>
-            <div className="partner_data">
-              <p className="card_heading">{partner.organization_type} | {partner.name}</p>
-              <div className="partner-data-info">
-                <p>{partner.ceo}</p>
-                <p>{partner.phone}</p>
-                <p>Рейтинг: {partner.rating}</p>
-              </div>
-            </div>
-            <div className="partner-sale partner_data card_heading">
-              {sales.find(sale => sale.partner_id === partner.id)?.discount_percentage || 0}%
-            </div>
-          </li>
-        })}
-      </ul> */}
-
-
 
       <div className="partners_container">
         <ul className="partners_list">
@@ -88,7 +66,7 @@ function MainPage() {
       </div>
 
       <Link to={'/create'}>
-        <button className="button"  style={{ width: "750px" }}>
+        <button className="button" style={{ width: "750px" }}>
           Создать нового партнера
         </button>
       </Link>

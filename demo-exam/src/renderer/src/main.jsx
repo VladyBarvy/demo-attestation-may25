@@ -1,10 +1,9 @@
-import './styles.css'
-
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { Routes, Route, HashRouter } from 'react-router'
+import './styles.css'
 
-import MainPage from './components/MainPage'
+import MainPage from './components/MainPage.jsx'
 import UpdatePartner from './components/UpdatePartner.jsx'
 import CreatePartner from './components/CreatePartner.jsx'
 

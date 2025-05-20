@@ -1,6 +1,7 @@
 import { app, shell, BrowserWindow, ipcMain } from 'electron'
 import { join } from 'path'
 import { electronApp, optimizer, is } from '@electron-toolkit/utils'
+const { dialog } = require('electron');
 import connectionDataBase from './db'
 
 async function getPartners() {
@@ -37,15 +38,35 @@ async function getSales() {
   }
 }
 
+// async function createPartner(event, partner) {
+//   const { type, name, ceo, email, phone, address, rating } = partner;
+
+//   try {
+//     await global.dbclient.query(`INSERT into partners (organization_type, name, ceo, email, phone, address, rating) values('${type}', '${name}', '${ceo}', '${email}', '${phone}', '${address}', ${rating})`)
+//     dialog.showMessageBox({ message: 'Карточка нового партнёра создана' })
+//   } catch (e) {
+//     console.log(e)
+//     dialog.showErrorBox('Ошибка', "Организация с таким наименованием уже есть в базе")
+//   }
+// }
+
 async function createPartner(event, partner) {
   const { type, name, ceo, email, phone, address, rating } = partner;
 
   try {
-    await global.dbclient.query(`INSERT into partners (organization_type, name, ceo, email, phone, address, rating) values('${type}', '${name}', '${ceo}', '${email}', '${phone}', '${address}', ${rating})`)
-    dialog.showMessageBox({ message: 'Успех! Партнер создан' })
+    await global.dbclient.query(
+      `INSERT INTO partners (organization_type, name, ceo, email, phone, address, rating) 
+       VALUES (nextval('partners_id_seq'), $1, $2, $3, $4, $5, $6, $7)`,
+      [type, name, ceo, email, phone, address, rating]
+    );
+    dialog.showMessageBox({ message: 'Карточка нового партнёра создана' });
   } catch (e) {
-    console.log(e)
-    dialog.showErrorBox('Ошибка', "Партнер с таким именем уже есть")
+    console.error(e);
+    if (e.code === '23505') {
+      dialog.showErrorBox('Ошибка', "Организация с таким наименованием уже есть в базе");
+    } else {
+      dialog.showErrorBox('Ошибка', "Произошла ошибка при создании партнёра");
+    }
   }
 }
 
@@ -56,17 +77,17 @@ async function updatePartner(event, partner) {
     await global.dbclient.query(`UPDATE partners
       SET name = '${name}', organization_type = '${type}', ceo='${ceo}', email='${email}', phone='${phone}', address='${address}', rating='${rating}'
       WHERE partners.id = ${id};`)
-    dialog.showMessageBox({ message: 'Успех! Данные обновлены' })
+    dialog.showMessageBox({ message: 'Данные обновлены' })
     return;
   } catch (e) {
-    dialog.showErrorBox('Невозможно создать пользователя', 'Такой пользователь уже есть')
+    dialog.showErrorBox('Ошибка', 'Организация с таким наименованием уже есть в базе')
     return ('error')
   }
 }
 
 function createWindow() {
-  const winIcon = join(__dirname, '../../resources/icon_3.ico');
-  const linuxIcon = join(__dirname, '../../resources/icon_31.png');
+  const winIcon = join(__dirname, '../../resources/master_floor.ico');
+  const linuxIcon = join(__dirname, '../../resources/master_floor_linux.png');
 
   // Create the browser window.
   const mainWindow = new BrowserWindow({

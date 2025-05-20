@@ -1,9 +1,8 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { useLocation } from 'react-router-dom';
 import { Link } from "react-router";
 
-export default function UpdatePartner() {
-  useEffect(() => { document.title = 'Обновить партнера' }, [])
+function UpdatePartner() {
   const location = useLocation();
   const [partner, setPartner] = useState(location.state.partner);
 
@@ -21,24 +20,16 @@ export default function UpdatePartner() {
     }
     await window.api.updatePartner(update_partner);
     setPartner(updPartner)
-    document.querySelector('form').reset()
+    document.querySelector('form_update_create').reset()
   }
+  
   return <div className="form_update_create">
-    <h1>- Обновить партнера -</h1>
+    <h1 className="heading">- Обновить партнера -</h1>
     <form onSubmit={(e) => submitHandler(e)}>
 
-      <div className="parametr">
+    <div className="parametr">
         <div>
-          <label htmlFor="name">Наименование:</label>
-        </div>
-        <div>
-          <input className="input_style" id="name" type="text" required defaultValue={partner.name} />
-        </div>
-      </div>
-
-      <div className="parametr">
-        <div>
-          <label htmlFor="type">Тип партнера:</label>
+          <label htmlFor="type">Тип организации:</label>
         </div>
         <div>
           <select className="input_style" name="" id="type" required defaultValue={partner.type} >
@@ -52,19 +43,10 @@ export default function UpdatePartner() {
 
       <div className="parametr">
         <div>
-          <label htmlFor="rating">Рейтинг:</label>
+          <label htmlFor="name">Наименование:</label>
         </div>
         <div>
-          <input className="input_style" id="rating" type="number" step="1" min='0' max='100' required defaultValue={partner.rating} />
-        </div>
-      </div>
-
-      <div className="parametr">
-        <div>
-          <label htmlFor="address">Адрес:</label>
-        </div>
-        <div>
-          <input className="input_style" id="address" type="text" required defaultValue={partner.address} />
+          <input className="input_style" id="name" type="text" required defaultValue={partner.name} />
         </div>
       </div>
 
@@ -79,6 +61,15 @@ export default function UpdatePartner() {
 
       <div className="parametr">
         <div>
+          <label htmlFor="email">Электронная почта:</label>
+        </div>
+        <div>
+          <input className="input_style" id="email" type="email" required defaultValue={partner.email} />
+        </div>
+      </div>
+
+      <div className="parametr">
+        <div>
           <label htmlFor="phone">Телефон:</label>
         </div>
         <div>
@@ -88,10 +79,19 @@ export default function UpdatePartner() {
 
       <div className="parametr">
         <div>
-          <label htmlFor="email">Email компании:</label>
+          <label htmlFor="address">Адрес:</label>
         </div>
         <div>
-          <input className="input_style" id="email" type="email" required defaultValue={partner.email} />
+          <input className="input_style" id="address" type="text" required defaultValue={partner.address} />
+        </div>
+      </div>
+
+      <div className="parametr">
+        <div>
+          <label htmlFor="rating">Рейтинг:</label>
+        </div>
+        <div>
+          <input className="input_style" id="rating" type="number" step="1" min='0' max='100' required defaultValue={partner.rating} />
         </div>
       </div>
 
@@ -103,3 +103,5 @@ export default function UpdatePartner() {
     </form>
   </div>
 }
+
+export default UpdatePartner;

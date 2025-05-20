@@ -49,8 +49,6 @@ CREATE TABLE sales
   PRIMARY KEY (id)
 );
 
-SET datestyle = "ISO, MDY";
-
 INSERT INTO sales (product_id, partner_id, production_quantity, date_of_sale)
 VALUES
 (1, 1, 15500, '03-23-2023'),
