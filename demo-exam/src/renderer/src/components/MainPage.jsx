@@ -20,12 +20,46 @@ function MainPage() {
     setSales(sales_data);
   }
 
+
+
   async function handleDeletePartner(id, e) {
-    e.stopPropagation();
-    const confirmDelete = window.confirm("Вы уверены, что хотите удалить этого партнера?");
+    e?.stopPropagation();
+    
+    // Проверка ID перед удалением
+    const numericId = Number(id);
+    if (!numericId || isNaN(numericId)) {
+      alert('Ошибка: неверный ID партнёра');
+      return;
+    }
+  
+    const confirmDelete = window.confirm(`Удалить данного партнёра?`);
+    
     if (confirmDelete) {
-      await window.api.deletePartner(id);
-      fetchData();
+      try {
+        const response = await window.api.deletePartner(numericId);
+        
+        if (!response) {
+          throw new Error('Не получен ответ от сервера');
+        }
+  
+        switch (response.status) {
+          case 'success':
+            alert(response.message);
+            setPartners(prev => prev.filter(p => p.id !== numericId));
+            break;
+          case 'not_found':
+            alert(response.message);
+            break;
+          case 'error':
+            alert(`Ошибка: ${response.message}`);
+            break;
+          default:
+            alert('Неизвестный статус ответа');
+        }
+      } catch (error) {
+        console.error('Ошибка удаления:', error);
+        alert(error.message || 'Неизвестная ошибка при удалении');
+      }
     }
   }
 

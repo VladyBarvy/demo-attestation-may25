@@ -38,25 +38,13 @@ async function getSales() {
   }
 }
 
-// async function createPartner(event, partner) {
-//   const { type, name, ceo, email, phone, address, rating } = partner;
-
-//   try {
-//     await global.dbclient.query(`INSERT into partners (organization_type, name, ceo, email, phone, address, rating) values('${type}', '${name}', '${ceo}', '${email}', '${phone}', '${address}', ${rating})`)
-//     dialog.showMessageBox({ message: 'Карточка нового партнёра создана' })
-//   } catch (e) {
-//     console.log(e)
-//     dialog.showErrorBox('Ошибка', "Организация с таким наименованием уже есть в базе")
-//   }
-// }
-
 async function createPartner(event, partner) {
   const { type, name, ceo, email, phone, address, rating } = partner;
 
   try {
     await global.dbclient.query(
       `INSERT INTO partners (organization_type, name, ceo, email, phone, address, rating) 
-       VALUES (nextval('partners_id_seq'), $1, $2, $3, $4, $5, $6, $7)`,
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
       [type, name, ceo, email, phone, address, rating]
     );
     dialog.showMessageBox({ message: 'Карточка нового партнёра создана' });
@@ -82,6 +70,39 @@ async function updatePartner(event, partner) {
   } catch (e) {
     dialog.showErrorBox('Ошибка', 'Организация с таким наименованием уже есть в базе')
     return ('error')
+  }
+}
+
+async function deletePartner(event, partnerId) {
+ 
+  try {
+    // Проверяем ID на валидность
+    if (typeof partnerId !== 'number' || isNaN(ipartnerId) || partnerId <= 0) {
+      throw new Error('Неверный формат ID партнёра');
+    }
+
+    const result = await global.dbclient.query(
+      'DELETE FROM partners WHERE id = $1 RETURNING *',
+      [partnerId]
+    );
+
+    if (result.rowCount === 0) {
+      return { success: false, message: `Партнёр с ID ${partnerId} не найден` };
+    }
+
+    return { 
+      success: true,
+      message: `Партнёр "${result.rows[0].name}" успешно удалён`,
+      deletedId: partnerId
+    };
+  } catch (error) {
+    console.error('Ошибка удаления:', error);
+    return { 
+      success: false,
+      message: error.code === '23503' 
+        ? 'Нельзя удалить партнёра - есть связанные записи' 
+        : error.message || 'Ошибка при удалении'
+    };
   }
 }
 
@@ -126,6 +147,49 @@ app.whenReady().then(async () => {
   ipcMain.handle('getSales', getSales)
   ipcMain.handle('createPartner', createPartner)
   ipcMain.handle('updatePartner', updatePartner)
+  // ipcMain.handle('deletePartner', deletePartner)
+
+
+
+  ipcMain.handle('delete-partner', async (event, partnerId) => {
+    const { dialog } = require('electron');
+    
+    // Проверяем ID на валидность
+    if (!partnerId || isNaN(partnerId) || partnerId <= 0) {
+      return { status: 'error', message: 'Неверный ID партнёра' };
+    }
+  
+    try {
+      const result = await global.dbclient.query(
+        'DELETE FROM partners WHERE id = $1 RETURNING id, name',
+        [partnerId]
+      );
+  
+      if (result.rowCount === 0) {
+        return { status: 'not_found', message: `Партнёр с ID ${partnerId} не найден` };
+      }
+  
+      return { 
+        status: 'success',
+        message: `Партнёр "${result.rows[0].name}" успешно удалён`,
+        deletedId: partnerId
+      };
+    } catch (error) {
+      console.error('Database error:', error);
+      return {
+        status: 'error',
+        message: error.code === '23503' 
+          ? 'Нельзя удалить партнёра - есть связанные записи' 
+          : 'Ошибка базы данных'
+      };
+    }
+  });
+
+
+
+
+
+  
 
   app.on('browser-window-created', (_, window) => {
     optimizer.watchWindowShortcuts(window)

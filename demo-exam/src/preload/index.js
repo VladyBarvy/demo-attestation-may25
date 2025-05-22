@@ -49,10 +49,22 @@ const api = {
       console.error('Error updating partner:', error)
       throw error
     }
+  },
+
+  deletePartner: async (id) => {
+    try {
+      return await ipcRenderer.invoke('delete-partner', id);
+    } catch (error) {
+      console.error('IPC error:', error);
+      return { 
+        status: 'error',
+        message: 'Ошибка связи с главным процессом'
+      };
+    }
   }
 
-
 }
+
 
 if (process.contextIsolated) {
   try {
