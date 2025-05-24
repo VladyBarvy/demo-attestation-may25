@@ -42,6 +42,8 @@ npm run dev
 
 При открытии окна клиента производится загрузка данных, и на главной странице отображается список партнёров:
 
-![Скриншот](screenshots/MainPage.png)
+<img src="screenshots/MainPage.png" width="50%" alt="Главная страница 1">
+
+<!-- ![Скриншот](screenshots/MainPage.png) -->
 
 
