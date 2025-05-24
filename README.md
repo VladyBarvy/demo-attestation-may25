@@ -54,10 +54,10 @@ npm run dev
 <table>
   <tr>
     <td align="center">
-      <img src="screenshots/MainPage.png" width="50%" alt="Главная страница 1">
+      <img src="screenshots/MainPage.png" width="80%" alt="Главная страница 1">
     </td>
     <td align="center">
-      <img src="screenshots/MainPage select partner.png" width="50%" alt="Главная страница 2">
+      <img src="screenshots/MainPage select partner.png" width="80%" alt="Главная страница 2">
     </td>
   </tr>
 </table>
