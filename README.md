@@ -40,6 +40,7 @@ npm run dev
 <div align="center">
 <img src="screenshots/ERD.png" width="50%" alt="ER-диаграмма БД">
 </div>
+
 ***
 
 # Описание проекта
