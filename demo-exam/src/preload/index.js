@@ -5,7 +5,7 @@ import { electronAPI } from '@electron-toolkit/preload'
 // renderer only if context isolation is enabled, otherwise
 // just add to the DOM global.
 const api = {
-  // Получение данных о партнерах
+  // Получение данных о партнёрах
   getPartners: async () => {
     try {
       return await ipcRenderer.invoke('getPartners')
@@ -25,7 +25,7 @@ const api = {
     }
   },
 
-  // Создание нового партнера
+  // Создание нового партнёра
   createPartner: async (partner) => {
     try {
       if (!partner || typeof partner !== 'object') {
@@ -38,7 +38,7 @@ const api = {
     }
   },
 
-  // Обновление партнера
+  // Обновление партнёра
   updatePartner: async (partner) => {
     try {
       if (!partner || typeof partner !== 'object' || !partner.id) {
@@ -51,6 +51,7 @@ const api = {
     }
   },
 
+  // Удаление партнёра
   deletePartner: async (id) => {
     try {
       return await ipcRenderer.invoke('delete-partner', id);
