@@ -19,7 +19,7 @@ git clone git@github.com:VladyBarvy/demo-attestation-may25.git
 - перейти в директорию проекта
 ```
 cd demo-attestation-may25/demo-exam
-``
+```
 - установить зависимости
 ```
 npm install
