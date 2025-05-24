@@ -51,10 +51,16 @@ npm run dev
 
 1. При открытии окна клиента производится загрузка данных, и на главной странице отображается список партнёров:
 
-<div align="center">
-<img src="screenshots/MainPage.png" width="50%" alt="Главная страница 1">
-<img src="screenshots/MainPage select partner.png" width="50%" alt="Главная страница 2">
-</div>
+<table>
+  <tr>
+    <td align="center">
+      <img src="screenshots/MainPage.png" width="50%" alt="Главная страница 1">
+    </td>
+    <td align="center">
+      <img src="screenshots/MainPage select partner.png" width="50%" alt="Главная страница 2">
+    </td>
+  </tr>
+</table>
 
 2. Чтобы добавить в список карточку нового партнёра, нужно нажать на кнопку "Создать нового партнёра"
 
